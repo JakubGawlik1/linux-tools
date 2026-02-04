@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+	echo "Usage: watch-proc <process-name>"
+	exit 1
+fi
+
+PROC="$1"
+
+
+
+watch -n 1 "
+pids=\$(pgrep $PROC)
+if [ -z \"\$pids\" ]; then
+	echo \"No processes found\"
+else
+	for pid in \$pids; do
+		echo \"=== PID $pid ===\"
+		pstree -a -p \$pid
+		echo
+	done
+fi
+"
